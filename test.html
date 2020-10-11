@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<hrml>
+  <head>
+    <meta charset="utf-8">
+    <title>test B screen saver</title>
+  </head>
+  <body>
+    <div id="main-contents">
+      <canvas id="canvas" width="1080" height="720">need to use browser which support canvas tag</cnavas>
+    </div>
+    <script src="oskCanvas.v2.js"></script>
+    <script>
+      var cvs = new osk.canvas(
+        document.getElementById('canvas'),
+        undefined,
+        undefined,
+        1080,
+        720,
+        60,
+        false
+      );
+
+      // update
+      const size = {
+        x: 64,
+        y: 64
+      };
+      const colorList = ['#0ff', '#f0f', '#ff0', '#f00', '#0f0', '#00f'];
+      const charList = ['B', 'E', 'M', 'Y', 'B', 'A', 'B', 'Y'];
+      var position = {
+        x: 0,
+        y: size.y + 1
+      };
+      var direction = {
+        x: 1,
+        y: 1
+      };
+      var color = 0; // 0-6
+      var char = 0; // 0-7
+      cvs.update = (frame)=>{
+        cvs.ctx.fillStyle = 'black';
+        cvs.ctx.fillRect(0, 0, cvs.canvas.width, cvs.canvas.height);
+        cvs.ctx.fillStyle = colorList[color];
+        cvs.ctx.font = '64px serif';
+        cvs.ctx.fillText(charList[char], position.x, position.y);
+        if(position.x < 0 || (position.x + size.x) > cvs.canvas.width){
+          direction.x *= -1;
+          color++;
+          char++;
+          if(color > 5) color = 0;
+          if(char > 7) char = 0;
+        }
+        if((position.y - size.y) < 0 || position.y > cvs.canvas.height){
+          direction.y *= -1;
+          color++;
+          char++;
+          if(color > 5) color = 0;
+          if(char > 7) char = 0;
+        }
+        position.x += direction.x * 10;
+        position.y += direction.y * 10;
+      };
+      cvs.start();
+    </script>
+  </body>
+</hrml>
