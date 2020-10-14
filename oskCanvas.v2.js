@@ -189,6 +189,10 @@ osk.canvas = class {
   set killContextMenu(flag){
     this.#killContextMenu = flag;
   }
+  // ----- false eventListener ----- //
+  addEventListener(type, func){
+    this.#canvasFront.addEventListener(type, func);
+  }
   // ----- function ----- //
   start(){
     if(typeof(this.#update) != 'function') throw new Error('need to set update function before start animation @ start(osk.canvas)');
