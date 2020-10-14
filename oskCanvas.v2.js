@@ -10,12 +10,14 @@ osk.canvas = class {
   #ctx;
   #ctxFront;
   #keyInput;
+  #mouseInput;
   #update; // call every frame
   #init; // call before animation
   #frame; // frame cnt
   #loop;
   #animationFrameRequestID;
   #isAnimating; // if true, cannot set other values
+  #killContextMenu;
   // ----- constructor ----- //
   constructor(
     canvasDOM = undefined,
@@ -24,7 +26,8 @@ osk.canvas = class {
     originWidth = 1920,
     originHeight = 1080,
     fps = 60,
-    isKeyGetFromFullWindow = false
+    isKeyGetFromFullWindow = false,
+    killContextMenu = false
     ){
     this.#fps = fps;
     this.#canvas = document.createElement('canvas');
@@ -44,12 +47,20 @@ osk.canvas = class {
       shift: false,
       meta: false
     };
+    this.#mouseInput = {
+      x: 0,
+      y: 0,
+      click: 0, // whenmouseup:-1, mousedown:1
+      btn: -1 // -1:none, 0:left, 1:middle, 2:right
+    };
     this.#update = updateFunc;
     this.#init = initFunc;
     this.#frame = undefined;
     this.#loop = ()=>{
       this.#animationFrameRequestID = requestAnimationFrame(this.#loop);
       this.#frame = Math.floor(performance.now() / 1000 * this.#fps);
+      if(this.#mouseInput.click == -1) this.#mouseInput.click = 0;
+      if(this.#mouseInput.click == -2) this.#mouseInput.click = -1;
       this.#update(this.#frame);
       this.#ctxFront.fillStyle = 'black';
       this.#ctxFront.fillRect(0, 0, this.#canvasFront.width, this.#canvasFront.height);
@@ -59,9 +70,11 @@ osk.canvas = class {
     };
     this.#animationFrameRequestID = undefined;
     this.#isAnimating = false;
+    this.#killContextMenu = killContextMenu;
     if(this.#canvasFront){
       if(isKeyGetFromFullWindow) var rootDOM = window;
       else var rootDOM = this.#canvasFront;
+      // key input
       rootDOM.addEventListener('keydown', (event)=>{
         this.#keyInput = {
           keyCode: event.keyCode,
@@ -80,12 +93,35 @@ osk.canvas = class {
           meta: event.metaKey
         };
       });
+      // mouse input
+      rootDOM.addEventListener('mousedown', (event)=>{
+        this.#mouseInput = {
+          x: event.clientX,
+          y: event.clientY,
+          click: 1,
+          btn: event.button
+        };
+      });
+      rootDOM.addEventListener('mouseup', (event)=>{
+        this.#mouseInput = {
+          x: event.clientX,
+          y: event.clientY,
+          click: -2,
+          btn: -1
+        };
+      });
+      rootDOM.addEventListener('mousemove', (event)=>{
+        this.#mouseInput.x = event.clientX;
+        this.#mouseInput.y = event.clientY;
+      });
+      rootDOM.addEventListener('contextmenu', (event)=>{event.preventDefault()});
     }
   }
   // ----- getter / setter ----- //
   get canvas(){return this.#canvas}
   get ctx(){return this.#ctx}
   get key(){return this.#keyInput}
+  get mouse(){return this.#mouseInput}
   get isAnimating(){return this.#isAnimating}
   set update(func){
     if(this.#isAnimating) throw new Error('settings cannnot be cnahged during animation @ set update(osk.canvas)');
@@ -149,6 +185,9 @@ osk.canvas = class {
     if(this.#isAnimating) throw new Error('settings cannot be changed during animation @ set originHeight(osk.canvas)');
     if(typeof(pix) != 'number' || pix <= 0) throw new Error('invalid value is set to "num" @ set originHeight(osk.canvas)');
     this.#canvas.height = pix;
+  }
+  set killContextMenu(flag){
+    this.#killContextMenu = flag;
   }
   // ----- function ----- //
   start(){
