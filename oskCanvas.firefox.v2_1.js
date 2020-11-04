@@ -1,4 +1,4 @@
-// osk.canvas v2 (no private field) //
+// osk.canvas v2.1 (no private field) //
 
 // namespace "osk" is a name borrowed from the Fate/GrandOrder character "OsakabeHime Princess".
 if(typeof(osk) === 'undefined') osk = {};

@@ -1,23 +1,23 @@
-// osk.canvas v2 (no private field) //
+// osk.canvas v2.1 //
 
 // namespace "osk" is a name borrowed from the Fate/GrandOrder character "OsakabeHime Princess".
 if(typeof(osk) === 'undefined') osk = {};
 osk.canvas = class {
   // ----- variable(private) ----- //
- #fps;
- #canvas;
- #canvasFront;
- #ctx;
- #ctxFront;
- #keyInput;
- #mouseInput;
- #update; // call every frame
- #init; // call before animation
- #frame; // frame cnt
- #loop;
- #animationFrameRequestID;
- #isAnimating; // if true, cannot set other values
- #killContextMenu;
+  #fps;
+  #canvas;
+  #canvasFront;
+  #ctx;
+  #ctxFront;
+  #keyInput;
+  #mouseInput;
+  #update; // call every frame
+  #init; // call before animation
+  #frame; // frame cnt
+  #loop;
+  #animationFrameRequestID;
+  #isAnimating; // if true, cannot set other values
+  #killContextMenu;
   // ----- constructor ----- //
   constructor(
     canvasDOM = undefined,
