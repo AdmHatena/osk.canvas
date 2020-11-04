@@ -23,7 +23,8 @@ osk.canvas.dataObject = {
   _contextMenuKiller: undefined
 };
 
-osk.canvas.initCanvas = (
+// ----- constructor ----- //
+osk.canvas.initCanvas = function(
   canvasObject, // format: osk.canvas.dataObject
   canvasDOM, // default: undefined
   initFunc, // default: undefined
@@ -33,7 +34,7 @@ osk.canvas.initCanvas = (
   fps, // default: 60
   isKeyGetFromFullWindow, // default: false
   killContextMenu // default: false
-)=>{
+){
   canvasObject._fps = fps;
   canvasObject._canvas = document.createElement('canvas');
   canvasObject._canvas.width = originWidth;
@@ -173,3 +174,43 @@ osk.canvas.initCanvas = (
     }
   }
 };
+
+// ----- getter / setter ----- //
+osk.canvas.getCanvas = function(canvasObject){
+  return canvasObject._canvas;
+}
+osk.canvas.getCtx = function(canvasObject){
+  return canvasObject._ctx;
+}
+osk.canvas.getKey = function(canvasObject){
+  return canvasObject._keyInput;
+}
+osk.canvas.getMouse = function(canvasObject){
+  return canvasObject._mouseInput;
+}
+osk.canvas.isAnimating = function(canvasObject){
+  return canvasObject._isAnimating;
+}
+osk.canvas.setUpdate = function(canvasObject, func){
+  if(canvasObject._isAnimating) throw new Error('settings cannnot be cnahged during animation @ setUpdate(osk.canvas)');
+  if(typeof(func) != 'function') throw new Error('invalid value set to "func" @ setUpdate(osk.canvas)');
+  canvasObject._update = func;
+}
+osk.canvas.setUpdate_force = function(canvasObject, func){
+  console.warn('this setter is deprecated, use "osk.canvas.setUpdate" instead @ setUpdate_force(osk.canvas)');
+  if(typeof(func) != 'function') throw new Error('invalid value set to "func" @ setUpdate(osk.canvas)');
+  canvasObject._update = func;
+}
+osk.canvas.setInit = function(canvasObject, func){
+  if(canvasObject._isAnimating) throw new Error('settings cannnot be cnahged during animation @ setInit(osk.canvas)');
+  if(typeof(func) != 'function') throw new Error('invalid value set to "func" @ setInit(osk.canvas)');
+  canvasObject._init = func;
+}
+osk.canvas.setInit_force = function(canvasObject, func){
+  console.warn('this setter is deprecated, use "osk.canvas.setInit" instead @ setInit_force(osk.canvas)');
+  if(typeof(func) != 'function') throw new Error('invalid value set to "func" @ setInit(osk.canvas)');
+  canvasObject._init = func;
+}
+osk.canvas.setCanvas = function(canvasObject, dom){
+  //
+}
