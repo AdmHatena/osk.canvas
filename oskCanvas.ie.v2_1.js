@@ -129,6 +129,47 @@ osk.canvas.initCanvas = (
       if(canvasObject._killContextMenu) rootDOM.addEventListener('contextmenu', canvasObject._contextMenuKiller);
     } else{
       // use attachEvent
+      rootDOM.attachEvent('keydown', function(event){
+        canvasObject._keyInput = {
+          keyCode: event.keyCode,
+          key: event.key,
+          alt: event.altKKey,
+          ctrl: event.ctrlKey,
+          shift: event.shiftKey,
+          meta: event.metaKey
+        };
+      });
+      rootDOM.attachEvent('keyup', function(event){
+        canvasObject._keyInput = {
+          keyCode: undefined,
+          key: undefined,
+          alt: event.altKKey,
+          ctrl: event.ctrlKey,
+          shift: event.shiftKey,
+          meta: event.metaKey
+        };
+      });
+      rootDOM.attachEvent('mousedown', function(event){
+        canvasObject._mouseInput = {
+          x: event.clientX,
+          y: event.clientY,
+          click: 1,
+          btn: event.button
+        };
+      });
+      rootDOM.attachEvent('mouseup', function(event){
+        canvasObject._mouseInput = {
+          x: event.clientX,
+          y: event.clientY,
+          click: -2,
+          btn: -1
+        };
+      });
+      rootDOM.attachEvent('mousemove', function(event){
+        canvasObject._mouseInput.x = event.clientX;
+        canvasObject._mouseInput.y = event.clientY;
+      });
+      if(canvasObject._killContextMenu) rootDOM.attachEvent('contextmenu', canvasObject._contextMenuKiller);
     }
   }
 };
