@@ -200,12 +200,14 @@ osk.canvas = class {
   }
   // ----- function ----- //
   start(){
+    if(this.#isAnimating) throw new Error('animation has already started @ start(osk.canvas)');
     if(typeof(this.#update) != 'function') throw new Error('need to set update function before start animation @ start(osk.canvas)');
     this.#isAnimating = true;
     if(typeof(this.#init) == 'function') this.#init();
     this.#loop();
   }
   stop(){
+    if(!this.#isAnimating) throw new Error('animation hasn\'t started @ stop(osk.canvas)');
     cancelAnimationFrame(this.#animationFrameRequestID);
     this.#isAnimating = false;
   }
