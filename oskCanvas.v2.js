@@ -186,6 +186,11 @@ osk.canvas = class {
     if(typeof(pix) != 'number' || pix <= 0) throw new Error('invalid value is set to "num" @ set originHeight(osk.canvas)');
     this.#canvas.height = pix;
   }
+  set originHeight_force(pix){
+    console.warn('this setter is depected, use "osk.canvas.originheight" instead @ set originheight_force(osk.canvas)');
+    if(typeof(pix) != 'number' || pix <= 0) throw new Error('invalid value is set to "num" @ set originHeight(osk.canvas)');
+    this.#canvas.height = pix;
+  }
   set killContextMenu(flag){
     this.#killContextMenu = flag;
   }
