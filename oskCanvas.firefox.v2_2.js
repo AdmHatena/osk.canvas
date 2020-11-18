@@ -45,8 +45,8 @@ osk.canvas = class {
       this._ctxFront = this._canvasFront.getContext('2d');
     }
     this._keyInput = {
-      keyCode: undefined,
-      key: undefined,
+      keyCode: {},
+      key: {},
       alt: false,
       ctrl: false,
       shift: false,
